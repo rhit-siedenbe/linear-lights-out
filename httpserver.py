@@ -10,7 +10,6 @@ current_game_state = {
     "num_lights": 0,
     "moves": 0,
 }
-n=0
 best_scores = {}
 
 def get_requested_filename(request_line):
