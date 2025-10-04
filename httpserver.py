@@ -317,6 +317,8 @@ def main(testing_flags=None):
                         writer_to_browser.write(response_headers)
                         writer_to_browser.write(response_body)
                         writer_to_browser.flush()
+                        shutdown_connection(connection_to_browser)
+                        continue
                     else:
                         light_buttons_html = '<form method="POST" action="/toggle_light">'
                         for index, light in enumerate(lights):
