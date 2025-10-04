@@ -12,6 +12,41 @@ current_game_state = {
 }
 best_scores = {}
 
+def generate_best_scores_html():
+    table_rows = ""
+    for num_lights in sorted(best_scores.keys()):
+        score_data = best_scores[num_lights]
+        table_rows += f"""
+            <tr>
+                <td>{num_lights}</td>
+                <td>{score_data['moves']}</td>
+                <td>{score_data['player_name']}</td>
+                <td>{score_data['date']}</td>
+            </tr>
+        """
+
+    html= f"""
+        <html lang="en">
+        <head>
+        <title>Best Scores - Linear Lights Out</title>
+        <link rel="stylesheet" type="text/css" href="styles/styles.css">
+        </head>
+        <body>
+            <table border="1">
+                <tr>
+                    <th>Number of Lights</th>
+                    <th>Lowest Number of Moves</th>
+                    <th>Player Name</th>
+                    <th>Date</th>
+                </tr>
+                {table_rows}
+            </table>
+            <br>
+        </body>
+        </html>
+    """
+    return html.encode("utf-8")
+
 def get_requested_filename(request_line):
     parts = request_line.split()
     path = parts[1]
@@ -183,40 +218,7 @@ def main(testing_flags=None):
                         """.encode("utf-8")
 
                 elif requested_filename == "./public/best_scores.html":
-                    table_rows = ""
-                    for num_lights in sorted(best_scores.keys()):
-                        score_data = best_scores[num_lights]
-                        table_rows += f"""
-                            <tr>
-                                <td>{num_lights}</td>
-                                <td>{score_data['moves']}</td>
-                                <td>{score_data['player_name']}</td>
-                                <td>{score_data['date']}</td>
-                            </tr>
-                        """
-
-
-                    response_body = f"""
-                        <html lang="en">
-                        <head>
-                        <title>Best Scores - Linear Lights Out</title>
-                        <link rel="stylesheet" type="text/css" href="styles/styles.css">
-                        </head>
-                        <body>
-                            <table border="1">
-                                <tr>
-                                    <th>Number of Lights</th>
-                                    <th>Lowest Number of Moves</th>
-                                    <th>Player Name</th>
-                                    <th>Date</th>
-                                </tr>
-                                {table_rows}
-                            </table>
-                            <br>
-                        </body>
-                        </html>
-                    """.encode("utf-8")
-
+                    response_body = generate_best_scores_html()
                 else:
                     response_body = get_file_body_in_bytes(requested_filename)
             
@@ -305,41 +307,8 @@ def main(testing_flags=None):
                         
                         current_game_state["active"] = False
 
-                        table_rows = ""
-                        for num_lights in sorted(best_scores.keys()):
-                            score_data = best_scores[num_lights]
-                            table_rows += f"""
-                                <tr>
-                                    <td>{num_lights}</td>
-                                    <td>{score_data['moves']}</td>
-                                    <td>{score_data['player_name']}</td>
-                                    <td>{score_data['date']}</td>
-                                </tr>
-                            """
+                        response_body = generate_best_scores_html()
 
-
-                        response_body = f"""
-                            <html lang="en">
-                            <head>
-                            <title>Best Scores - Linear Lights Out</title>
-                            <link rel="stylesheet" type="text/css" href="styles/styles.css">
-                            </head>
-                            <body>
-                                <table border="1">
-                                    <tr>
-                                        <th>Number of Lights</th>
-                                        <th>Lowest Number of Moves</th>
-                                        <th>Player Name</th>
-                                        <th>Date</th>
-                                    </tr>
-                                    {table_rows}
-                                </table>
-                                <br>
-                            </body>
-                            </html>
-                        """.encode("utf-8")
-
-                        
                         content_type = "text/html; charset=utf-8"
 
                         response_headers = "\r\n".join([
