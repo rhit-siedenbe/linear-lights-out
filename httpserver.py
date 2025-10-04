@@ -314,7 +314,7 @@ def main(testing_flags=None):
                         response_headers = "\r\n".join([
                             'HTTP/1.1 200 OK',
                             f'Content-Type: {content_type}',
-                            f'Content-Length: {len(response_body)}',
+                            f'Content-length: {len(response_body)}',
                             'Connection: close',
                             '',
                             ''
